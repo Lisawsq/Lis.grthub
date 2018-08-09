@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="./jquery-3.3.1.js"></script>
+    <title>JQ轮播图</title>
+    <style>
+        .banner {
+            width: 800px;
+            height: 300px;
+            margin: 20px auto;
+            position: relative;
+
+        }
+
+        .banner_img_a {
+            position: absolute;
+        }
+
+        .banner_img_a>img {
+            width: 100%;
+            height: 300px;
+        }
+
+        .banner .num {
+            color: black;
+            position: absolute;
+            bottom: 20px;
+            left: 10px;
+        }
+
+        .banner span {
+            background-color: springgreen;
+            padding: 4px 9px;
+            border: 1px solid springgreen;
+        }
+
+        .cur {
+            border-color: darkmagenta !important;
+        }
+
+        .page {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="banner">
+        <a href="" class="banner_img_a" style="display:block;">
+            <img src="imgs/libanner.png" alt="">
+        </a>
+        <a href="" class="banner_img_a" style="display:none;">
+            <img src="imgs/peibanner.jpg" alt="">
+        </a>
+        <a href="" class="banner_img_a" style="display:none;">
+            <img src="imgs/shabanner.png" alt="">
+        </a>
+        <a href="" class="banner_img_a" style="display:none;">
+            <img src="imgs/shabanner1.jpg" alt="">
+        </a>
+        <a href="" class="banner_img_a" style="display:none;">
+            <img src="imgs/toubanner.JPG" alt="">
+        </a>
+        <!-- 轮播序号 -->
+        <div class="num">
+            <span class="cur">1</span>
+            <span>2</span>
+            <span>3</span>
+            <span>4</span>
+            <span>5</span>
+        </div>
+        <!-- 左右按键的切换 -->
+        <div class="page">
+            <span class="prev">&lt;</span>
+            <span class="next">&gt;</span>
+        </div>
+    </div>
+    <script>
+        //自动轮播下一张
+        //记录索引值，初始为第一张
+        var index = 0;
+        var timer = setInterval(nextImg, 1000)
+        function nextImg() {
+            index++;
+            //判断，如果索引值大于等于图片的数量，让它从头开始轮播
+            if (index >= $('.banner_img_a').length) {
+                index = 0;
+            }
+            showImg();
+        };
+        // 上一张的方法
+        function prevImg() {
+            index--;
+            if (index < 0) {
+                index = $('.banner_img_a').length - 1;
+            }
+            showImg()
+        }
+        //轮播动起来
+        function showImg() {
+            // eq() 根据索引在集合中取出对应的元素
+            $('.banner_img_a').eq(index).show().siblings().hide();
+            $('.num').add('.page').css('display','block')
+            $('.num span').eq(index).addClass('cur').siblings().removeClass('cur'); // 再找到所有同级元素隐藏
+        }
+        // 下一张的点击事件
+        $('.next').click(function () {
+            nextImg();
+        })
+
+        // 上一张的点击事件
+        $('.prev').click(function () {
+            prevImg();
+        })
+        // 上一页和下一页的鼠标移动事件
+		$('.page span').hover(function() {
+			// 鼠标移入时要做的操作
+			clearInterval(timer);
+		}, function() {
+			// 鼠标移除时要做的操作
+			timer = setInterval(nextImg, 1000);
+		});
+
+		$('.num span').hover(function() {
+			// 鼠标移入时要做的操作
+			clearInterval(timer);
+			index = $(this).index();
+			showImg();
+		}, function() {
+			// 鼠标移除时要做的操作
+			timer = setInterval(nextImg, 1000);
+		});
+    </script>
+</body>
+
+</html>
